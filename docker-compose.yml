@@ -8,6 +8,11 @@ services:
       - DB_PORT=5432
       - HTTP_BACKEND_HOST=0.0.0.0
 
+  config:
+    build: .
+    command: bash -c "uvicorn mock.config:app --reload --host 0.0.0.0 --port 3700"
+    ports: [ "8080:3700" ]
+
   postgres:
     image: postgres:17
     ports: [ "5432:5432" ]
