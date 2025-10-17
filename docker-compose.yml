@@ -1,0 +1,27 @@
+services:
+  api:
+    build: .
+    ports: [ "8000:3629" ]
+    env_file: .env
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - HTTP_BACKEND_HOST=0.0.0.0
+
+  postgres:
+    image: postgres:17
+    ports: [ "5432:5432" ]
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+      - PGDATA=/data/postgres
+    volumes:
+      - ./.local/pg_data:/data/postgres
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports: [ "6379:6379" ]
+    volumes:
+      - ./.local/redis_data:/data
