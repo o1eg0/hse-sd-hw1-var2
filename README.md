@@ -4,7 +4,7 @@
 
 # Домашнее задание SD 9
 
-<a href="./docs/entities.md">Сущности</a></p>
+<a href="./docs/entities.md">Сущности</a> | <a href="./docs/architecture">ADR-ки</a>
 
 ## Задание
 
