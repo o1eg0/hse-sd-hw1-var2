@@ -1,17 +1,19 @@
 services:
-  api:
+  rental:
     build: .
-    ports: [ "8000:3629" ]
+    command: python -m services.rental
+    ports: [ "8000:8000" ]
     env_file: .env
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432
       - HTTP_BACKEND_HOST=0.0.0.0
+      - HTTP_BACKEND_PORT=8000
 
-  config:
+  stubs:
     build: .
-    command: bash -c "uvicorn mock.config:app --reload --host 0.0.0.0 --port 3700"
-    ports: [ "8080:3700" ]
+    command: python -m services.stubs
+    ports: [ "3629:3629" ]
 
   postgres:
     image: postgres:17

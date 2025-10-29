@@ -17,9 +17,15 @@ class HTTPBackendSettings(AppSettings):
     workers: int = 4
     loop: str = "asyncio"
     host: str = "0.0.0.0"
-    port: int = 3629
+    port: int = 8000
     timeout_keep_alive: int = 70
     backlog: int = 2048
     reload: bool = False
 
     model_config = SettingsConfigDict(env_prefix="HTTP_BACKEND_")
+
+
+class TariffSettings(AppSettings):
+    price_coeff_settings: dict
+
+    model_config = SettingsConfigDict(env_prefix="TARIFF_")

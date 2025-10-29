@@ -29,16 +29,18 @@ def handle_create_offer_request(station_id: str, user_id: str):
     # adjust with configuration settings
     actual_price_per_hour = tariff.price_per_hour
     if configs.price_coeff_settings is not None:
-        available_powerbanks = sum(0 if slot.empty else 1 for slot in station_data.slots)
+        available_powerbanks = sum(
+            0 if slot.empty else 1 for slot in station_data.slots
+        )
         if available_powerbanks <= MAGIC_CONSTANT:
-            increase = float(configs.price_coeff_settings['last_banks_increase'])
+            increase = float(configs.price_coeff_settings["last_banks_increase"])
             actual_price_per_hour = int(actual_price_per_hour * increase)
-        print(f'>> Available powerbanks: {available_powerbanks}')
-
+        print(f">> Available powerbanks: {available_powerbanks}")
 
     actual_free_period_min = tariff.free_period_min
     if user_profile.has_subscribtion:
-        actual_free_period = max(actual_free_period, 30)
+        actual_free_period = max(actual_free_period_min, 30)
+        print(actual_free_period)
 
     offer = OfferData(
         str(uuid.uuid4()),
@@ -46,10 +48,10 @@ def handle_create_offer_request(station_id: str, user_id: str):
         station_id=station_id,
         price_per_hour=actual_price_per_hour,
         free_period_min=actual_free_period_min,
-        deposit=0 if user_profile.trusted else tariff.default_deposit
+        deposit=0 if user_profile.trusted else tariff.default_deposit,
     )
 
-    print(f'>> New offer! {offer}')
+    print(f">> New offer! {offer}")
 
     # save it immediately
     offers_database[offer.id] = offer
@@ -70,7 +72,7 @@ def handle_start_order_request(offer_id: str):
         deposit=offer.deposit,
         total_amount=0,
         start_time=datetime.now(),
-        finish_time=None
+        finish_time=None,
     )
     # money is very important thing!
     dr.hold_money_for_order(offer.user_id, order.id, offer.deposit)
@@ -78,12 +80,12 @@ def handle_start_order_request(offer_id: str):
     order.powerbank_id = dr.eject_powerbank(offer.station_id).powerbank_id
 
     if not order.powerbank_id:
-        print(f'>> No powerbank available at station {offer.station_id}')
+        print(f">> No powerbank available at station {offer.station_id}")
         dr.clear_money_for_order(order.user_id, order.id, 0)
 
         return None
 
-    print(f'>> Order was started! powerbank_id={order.powerbank_id}')
+    print(f">> Order was started! powerbank_id={order.powerbank_id}")
 
     orders_database[order.id] = order
     order_index_pb[order.powerbank_id] = order.id
@@ -102,19 +104,19 @@ def handle_return_powerbank_request(powerbank_id: str, station_id: str):
     else:
         order.total_amount = int(duration.total_hours()) * order.price_per_hour
     dr.clear_money_for_order(order.user_id, order_id, order.total_amount)
-    print(f'>> Order was finished! Total amount: {order.total_amount}')
+    print(f">> Order was finished! Total amount: {order.total_amount}")
 
 
-if __name__ == '__main__':
-    print('> Starting first scenario! <')
-    offer1 = handle_create_offer_request('some-station-id', 'some-user-id')
+if __name__ == "__main__":
+    print("> Starting first scenario! <")
+    offer1 = handle_create_offer_request("some-station-id", "some-user-id")
     order1 = handle_start_order_request(offer1.id)
 
     time.sleep(1)
-    handle_return_powerbank_request(order1.powerbank_id, 'another-station-id')
-    print('< First scenario is over!\n\n')
+    handle_return_powerbank_request(order1.powerbank_id, "another-station-id")
+    print("< First scenario is over!\n\n")
 
-    print('> Starting second scenario! <')
-    offer2 = handle_create_offer_request('empty-station-id', 'some-user-id')
+    print("> Starting second scenario! <")
+    offer2 = handle_create_offer_request("empty-station-id", "some-user-id")
     order2 = handle_start_order_request(offer2.id)
-    print('< Second scenario is over!\n\n')
+    print("< Second scenario is over!\n\n")

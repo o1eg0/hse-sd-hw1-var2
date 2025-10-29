@@ -13,6 +13,7 @@ black = "*"
 pytest = "*"
 mypy = "*"
 uvicorn = {extras = ["standard"], version = "*"}
+httpx = "*"
 
 [dev-packages]
 

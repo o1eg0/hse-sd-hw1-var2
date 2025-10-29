@@ -8,5 +8,3 @@ COPY Pipfile Pipfile.lock ./
 RUN pipenv install --deploy --system
 
 COPY . .
-
-CMD ["python", "-m", "src"]

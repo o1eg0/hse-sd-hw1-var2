@@ -1,10 +1,15 @@
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 
-from .routes import router as routes_router
+from .v1 import router as v1_router
 
+
+def get_description() -> str:
+    with open(Path(__file__).parent.parent / "README.md", "r") as readme:
+        return readme.read()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
@@ -13,11 +18,12 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 def create_app() -> FastAPI:
     app = FastAPI(
-        title="sd-hw1-var2",
+        title="Rental",
+        description=get_description(),
         contact={"name": "sd-command-9"},
         lifespan=lifespan,
         version="0.1.0",
     )
 
-    app.include_router(routes_router)
+    app.include_router(v1_router)
     return app

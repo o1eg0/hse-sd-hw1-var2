@@ -4,11 +4,13 @@
 
 # Домашнее задание SD 9)
 
-<a href="./docs/entities.md">Сущности</a> | <a href="./docs/architecture">ADR-ки</a> | <a href="./docs/volume-calculation.md">Оценка объема</a>
+<a href="./docs/entities.md">Сущности</a> | <a href="./docs/architecture">ADR-ки</a> | <a href="./docs/volume-calculation.md">Оценка объема</a> | <a href="./docs/fr_nfr.md">FR/NFR</a>
 
 ## Задание
 
 Требуется на основе имеющейся заготовки спроектировать и реализовать подходящую архитектуру с учетом требований из [таблички](https://docs.google.com/spreadsheets/d/166tc7e-_QA5blCTfelusi484pzfu-Kkr9-9fbgeSE0s).
+
+Подробнее: [Гугл документ](https://docs.google.com/document/d/13lFO-i7fgXxOF7auxb0FzIDUVv3ZksF1fuzAP3ZYaio/edit)
 
 ## Описание
 

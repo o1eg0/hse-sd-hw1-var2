@@ -1,7 +1,5 @@
 from dataclasses import dataclass
-
 from datetime import datetime
-
 
 # Содержит в себе DTO (data transfer objects) / данные, получаемые из внешних источников
 
@@ -19,14 +17,16 @@ class StationData:
     tariff_id: str
     location: str
     slots: list[Slot]
+    country: str = "RU"
 
 
 @dataclass
 class Tariff:
     id: str
-    price_per_hour: int
+    price_per_hour: float
     free_period_min: int
     default_deposit: int
+    currency: str = "RUB"
 
 
 @dataclass
@@ -41,7 +41,7 @@ class OfferData:
     id: str
     user_id: str
     station_id: str
-    price_per_hour: int
+    price_per_hour: float
     free_period_min: int
     deposit: int
 
@@ -52,7 +52,7 @@ class OrderData:
     user_id: str
     start_station_id: str
     finish_station_id: str
-    price_per_hour: int
+    price_per_hour: float
     free_period_min: int
     deposit: int
     total_amount: int
