@@ -41,8 +41,6 @@
 
 # Наблюдаемость
 
-- Метрики Prometheus: RPS/latency/ошибки, кэш-хиты/промахи, ретраи, побочные эффекты (payments/stations).
-- OTel-трейсинг сквозной (traceId в логи).
 - Структурные логи (JSON), корреляция по request_id, idempotency_key.
 
 # Развёртывание
