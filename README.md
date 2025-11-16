@@ -2,7 +2,7 @@
 [![Python version](https://img.shields.io/badge/Python-3.13-blue)](https://www.python.org/downloads/)
 
 
-# Домашнее задание SD 9)
+# Домашнее задание SD 9
 
 <a href="./docs/entities.md">Сущности</a> | <a href="./docs/architecture">ADR-ки</a> | <a href="./docs/volume-calculation.md">Оценка объема</a> | <a href="./docs/fr_nfr.md">FR/NFR</a>
 

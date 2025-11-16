@@ -14,12 +14,6 @@ class AppSettings(BaseSettings):
     )
 
 
-class Settings(AppSettings):
-    database_url: str = "postgresql+psycopg://rental:rental@postgres:5432/rental"
-
-    model_config = Config(env_prefix="RENTAL_")
-
-
 class PricingSettings(BaseSettings):
     base_url: str = "http://stubs:3629"
 
@@ -35,19 +29,19 @@ class PricingSettings(BaseSettings):
     model_config = Config(env_prefix="PRICING_")
 
 
-class DefaultTariffSettings(AppSettings):
-    base_url: str = "http://stubs:3629"
-    config_key: str = "pricing:config"
-    key_template: str = "pricing:tariff:{id}"
+class RentalApiSettings(BaseSettings):
+    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
 
-    config_ttl_sec: int = 60
-    ttl_sec: int = 600
-    offer_ttl_sec: int = 5 * 60
-    fallback_greedy_coeff: float = 1.2
-
-    model_config = Config(env_prefix="DEFAULT_TARIFF_")
+    model_config = Config(env_prefix="RENTAL_API_")
 
 
-settings = Settings()
+class RentalQuerySettings(BaseSettings):
+    pricing_url: str = "http://localhost:9000"
+    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres" # Разделены для реплики
+
+    model_config = Config(env_prefix="RENTAL_QUERY_")
+
+
 pricing_settings = PricingSettings()
-default_tariff_settings = DefaultTariffSettings()
+rental_api_settings = RentalApiSettings()
+rental_query_settings = RentalQuerySettings()

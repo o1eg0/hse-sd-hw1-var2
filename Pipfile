@@ -16,6 +16,9 @@ httpx = "*"
 sqlmodel = "*"
 pydantic-settings = "*"
 redis = "*"
+asyncpg = "*"
+greenlet = "*"
+alembic = "*"
 
 [dev-packages]
 

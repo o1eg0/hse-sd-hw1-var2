@@ -1,22 +1,40 @@
 from contextlib import asynccontextmanager
 from datetime import datetime
 
-import httpx
-from aioredis import from_url as redis_from_url
-from fastapi import FastAPI, HTTPException
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+import uvicorn
+from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.responses import RedirectResponse
+from httpx import AsyncClient
+from sqlalchemy import text
+from sqlalchemy.exc import ProgrammingError
+from sqlalchemy.ext.asyncio import async_engine_from_config, async_sessionmaker
+from sqlmodel.ext.asyncio.session import AsyncSession
 
+from services.shared.db_models import RentalDB
 from services.shared.model import RentInfo
+from services.shared.settings import rental_query_settings
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    engine = create_async_engine(settings.DATABASE_URL, pool_size=30, max_overflow=30)
-    sessmaker = async_sessionmaker(engine, expire_on_commit=False)
+    engine = async_engine_from_config(
+        {"url": rental_query_settings.database_url}, prefix=""
+    )
+    sessmaker = async_sessionmaker(
+        engine,
+        class_=AsyncSession,
+        expire_on_commit=False,
+    )
+    async with sessmaker() as sess:
+        await sess.exec(text("SELECT 1"))
 
     app.state.sessmaker = sessmaker
-    app.state.rds = await redis_from_url(settings.REDIS_URL, decode_responses=True)
     yield
+
+
+async def get_db_session(r: Request):
+    async with r.app.state.sessmaker() as sess, sess.begin():
+        yield sess
 
 
 app = FastAPI(
@@ -28,24 +46,23 @@ app = FastAPI(
 
 
 @app.get("/get_rent_info", response_model=RentInfo)
-async def rental_info(oid: str):
-    """
-    - читаем RentalDB
-    - если аренда активна: зовём pricing /v1/calc-accrued
-    - если завершена: берём total_amount из БД
-    """
-    rental = db.get(RentalDB, rental_id)
+async def rental_info(rental_id: str, sess: AsyncSession = Depends(get_db_session)):
+    try:
+        rental = await sess.get(RentalDB, rental_id)
+    except ProgrammingError:
+        raise HTTPException(500, "Database programming error (most likely table does not exist)")
+
     if not rental:
         raise HTTPException(404, "Rental not found")
 
     accrued_amount = rental.total_amount
     ended_at = rental.finish_time
 
-    if rental.finish_time is None:
+    if not rental.finish_time:
         # аренда ещё идёт — считаем через pricing
-        async with httpx.AsyncClient() as client:
+        async with AsyncClient() as client:
             resp = await client.post(
-                "http://pricing:9000/v1/calc-accrued",
+                f"{rental_query_settings.pricing_url}/v1/calc-accrued",
                 json={
                     "price_per_hour": rental.price_per_hour,
                     "free_period_min": rental.free_period_min,
@@ -66,3 +83,12 @@ async def rental_info(oid: str):
         ended_at=ended_at,
         accrued_amount=accrued_amount,
     )
+
+
+@app.get("/", include_in_schema=False)
+async def root():
+    return RedirectResponse(url="/docs")
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
