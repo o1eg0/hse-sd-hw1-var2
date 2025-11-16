@@ -1,6 +1,13 @@
 import requests
 
-from model import ConfigMap, EjectResponse, Slot, StationData, Tariff, UserProfile
+from services.shared.model import (
+    ConfigMap,
+    EjectResponse,
+    Slot,
+    StationData,
+    Tariff,
+    UserProfile,
+)
 
 station_http = "http://localhost:3629/station-data"
 tariff_http = "http://localhost:3629/tariff"

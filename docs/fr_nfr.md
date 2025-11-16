@@ -39,14 +39,14 @@
 ### get_rent_info (формат)
 ```json
 {
-  "rental_id": "…",
+  "order_id": "…",
   "status": "active",
   "user_id": "…",
   "country": "DE",
   "currency": "EUR",
   "started_at": "…",
   "ended_at": null,
-  "current_amount": "100"
+  "accrued_amount": "100"
 }
 ```
 

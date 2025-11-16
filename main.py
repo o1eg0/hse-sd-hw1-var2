@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime
 
 import data_requests as dr
-from model import OfferData, OrderData
+from services.shared.model import OfferData, OrderData
 
 # amazingly fast and totally inreliable databases
 offers_database = {}

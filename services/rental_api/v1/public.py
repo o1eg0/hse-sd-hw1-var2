@@ -6,8 +6,8 @@ from fastapi import APIRouter, HTTPException
 from fastapi.params import Header
 from pydantic import BaseModel
 
-from model import Tariff, StationData
-from services.rental.code import ErrorCode
+from services.rental_api.code import ErrorCode
+from services.shared.model import StationData, Tariff
 
 router = APIRouter()
 
@@ -24,7 +24,7 @@ class OfferRs(BaseModel):
     station_id: str
     country: str
     tariff_snapshot: Tariff
-    pricing_mode: Literal["normal","fallback_greedy"]
+    pricing_mode: Literal["normal", "fallback_greedy"]
     created_at: datetime = "2025-10-29T12:34:57Z"
     expires_at: datetime = "2025-10-29T12:39:57Z"
 
