@@ -5,11 +5,10 @@ import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from httpx import AsyncClient
-from sqlalchemy import text
 from sqlalchemy.exc import ProgrammingError
-from sqlalchemy.ext.asyncio import async_engine_from_config, async_sessionmaker
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from services.shared.db import create_async_sessionmaker
 from services.shared.db_models import RentalDB
 from services.shared.model import RentInfo
 from services.shared.settings import rental_query_settings
@@ -17,18 +16,8 @@ from services.shared.settings import rental_query_settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    engine = async_engine_from_config(
-        {"url": rental_query_settings.database_url}, prefix=""
-    )
-    sessmaker = async_sessionmaker(
-        engine,
-        class_=AsyncSession,
-        expire_on_commit=False,
-    )
-    async with sessmaker() as sess:
-        await sess.exec(text("SELECT 1"))
-
-    app.state.sessmaker = sessmaker
+    session_maker = await create_async_sessionmaker(rental_query_settings.database_url)
+    app.state.sessmaker = session_maker
     yield
 
 
@@ -50,7 +39,9 @@ async def rental_info(rental_id: str, sess: AsyncSession = Depends(get_db_sessio
     try:
         rental = await sess.get(RentalDB, rental_id)
     except ProgrammingError:
-        raise HTTPException(500, "Database programming error (most likely table does not exist)")
+        raise HTTPException(
+            500, "Database programming error (most likely table does not exist)"
+        )
 
     if not rental:
         raise HTTPException(404, "Rental not found")

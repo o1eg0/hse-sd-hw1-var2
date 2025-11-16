@@ -5,10 +5,11 @@ services:
     ports: [ "8000:8000" ]
     env_file: .env
     environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - HTTP_BACKEND_HOST=0.0.0.0
-      - HTTP_BACKEND_PORT=8000
+      - RENTAL_QUERY_DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/postgres
+      - RENTAL_QUERY_PRICING_URL=http://pricing:9000
+    depends_on:
+      - postgres
+      - pricing
 
   rental-api:
     build: .
@@ -16,10 +17,7 @@ services:
     ports: [ "8080:8000" ]
     env_file: .env
     environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - HTTP_BACKEND_HOST=0.0.0.0
-      - HTTP_BACKEND_PORT=8000
+      - RENTAL_API_DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/postgres
 
   pricing:
     build: .

@@ -1,4 +1,3 @@
-from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 import uvicorn
@@ -6,10 +5,14 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
 from services.rental_api.v1 import router as v1_router
+from services.shared.db import create_async_sessionmaker
+from services.shared.settings import rental_query_settings
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+async def lifespan(app: FastAPI):
+    session_maker = await create_async_sessionmaker(rental_query_settings.database_url)
+    app.state.sessmaker = session_maker
     yield
 
 

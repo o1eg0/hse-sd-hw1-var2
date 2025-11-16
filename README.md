@@ -79,3 +79,18 @@ docker compose up -d && docker compose logs -f
 ```bash
 docker compose down
 ```
+
+
+## Миграции БД
+
+Применение миграций
+
+```bash
+alembic upgrade head
+```
+
+Создание новой миграции
+
+```bash
+alembic revision --autogenerate -m "new tables" 
+```

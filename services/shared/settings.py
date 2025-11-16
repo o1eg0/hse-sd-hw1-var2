@@ -37,7 +37,7 @@ class RentalApiSettings(BaseSettings):
 
 class RentalQuerySettings(BaseSettings):
     pricing_url: str = "http://localhost:9000"
-    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres" # Разделены для реплики
+    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"  # Разделены для реплики
 
     model_config = Config(env_prefix="RENTAL_QUERY_")
 

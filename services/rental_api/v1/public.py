@@ -1,13 +1,11 @@
 from datetime import datetime
 from typing import Literal
 
-import httpx
 from fastapi import APIRouter, HTTPException
 from fastapi.params import Header
 from pydantic import BaseModel
 
-from services.rental_api.code import ErrorCode
-from services.shared.model import StationData, Tariff
+from services.shared.model import Tariff
 
 router = APIRouter()
 
@@ -31,32 +29,9 @@ class OfferRs(BaseModel):
 
 @router.post("/offers", response_model=OfferRs, description="Создать оффер")
 async def create_offer(r: CreateOfferRq):
-    pricing_mode = "fallback_greedy"
-
-    try:
-        ue = "http://stubs:3629/user-profile"
-        user = httpx.get(f"{ue}?id={r.user_id}").json()
-        pricing_mode = "normal"
-    except Exception:
-        pass
-
-    te = "http://stubs:3629/tariff"
-    tariff = httpx.get(f"{te}?id={r.tariff_id}").json()
-
-    sde = "http://stubs:3629/station-data"
-    station_data = StationData(**httpx.get(f"{sde}?id={r.station_id}").json())
-
-    if not station_data.slots:
-        raise HTTPException(409, ErrorCode.STATION_EMPTY)
-
-    return OfferRs(
-        offer_id="off_789",
-        user_id=r.user_id,
-        station_id=r.station_id,
-        country=station_data.country,
-        tariff_snapshot=tariff,
-        pricing_mode=pricing_mode,
-    )
+    # TODO: call pricing service
+    # TODO: persist OfferDB
+    raise HTTPException(501, "Not implemented yet")
 
 
 @router.post("/rentals", description="Старт аренды (выдача банки)")

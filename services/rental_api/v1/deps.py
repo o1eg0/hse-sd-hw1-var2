@@ -1,11 +1,9 @@
-from fastapi import Header, HTTPException
-from sqlmodel import Session
-
-from services.shared.db import get_session
+from fastapi import Header, HTTPException, Request
 
 
-def get_db_session() -> Session:
-    return next(get_session())
+async def get_db_session(r: Request):
+    async with r.app.state.sessmaker() as sess, sess.begin():
+        yield sess
 
 
 def get_idempotency_key(
