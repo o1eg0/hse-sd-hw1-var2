@@ -1,6 +1,6 @@
 PYTHON_VERSION := 3.13
-CODE = src
-TESTS = tests
+CODE = services
+TESTS = services
 
 .PHONY: help
 help: ## Show this help

@@ -6,13 +6,19 @@ name = "pypi"
 [packages]
 fastapi = "*"
 requests = "*"
-pydantic-settings = "*"
 isort = "*"
 ruff = "*"
 black = "*"
 pytest = "*"
 mypy = "*"
 uvicorn = {extras = ["standard"], version = "*"}
+httpx = "*"
+sqlmodel = "*"
+pydantic-settings = "*"
+redis = "*"
+asyncpg = "*"
+greenlet = "*"
+alembic = "*"
 
 [dev-packages]
 
