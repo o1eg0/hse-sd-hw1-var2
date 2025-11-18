@@ -9,3 +9,5 @@ RUN pipenv lock --python 3.13
 RUN pipenv install --deploy --system
 
 COPY . .
+
+CMD ["python3", "-m", "pytest", "tests/unit/", "-v"]
