@@ -10,6 +10,7 @@ isort = "*"
 ruff = "*"
 black = "*"
 pytest = "*"
+pytest-asyncio = "*"
 mypy = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 httpx = "*"
