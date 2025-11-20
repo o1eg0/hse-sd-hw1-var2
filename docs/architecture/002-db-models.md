@@ -6,4 +6,4 @@
 
 ## Core
 
-<a href="./services/shared/db_models.py">Модели для базы данных</a>
+<a href="https://github.com/o1eg0/hse-sd-hw1-var2/blob/main/services/shared/db_models.py">Модели для базы данных</a>
