@@ -7,3 +7,9 @@
 ## Core
 
 <a href="https://github.com/o1eg0/hse-sd-hw1-var2/blob/main/services/shared/db_models.py">Модели для базы данных</a>
+
+## Миграции
+
+Осуществляются с помощью `alembic`:
+
+<a href="https://github.com/o1eg0/hse-sd-hw1-var2/tree/main/migrations">Миграции</a>
