@@ -83,8 +83,7 @@ docker compose down
 ## Запуск тестов (локально)
 
 ```bash
-docker build -t app-testing:latest -f Dockerfile.test . &&\
-docker run app-testing:latest
+make test
 ```
 
 ## Миграции БД

@@ -28,4 +28,4 @@ lint: ## Run linters in check mode
 
 .PHONY: test
 test: ## Runs pytest with coverage
-	pytest $(TESTS) -n 3 --cov=$(CODE)
+	docker build -t app-testing:latest -f Dockerfile.test . && docker run app-testing:latest
