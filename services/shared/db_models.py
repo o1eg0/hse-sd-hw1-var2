@@ -118,7 +118,9 @@ class CountryRetentionConfigDB(SQLModel, table=True):
 
 
 class IdempotencyKeyScope(str, Enum):
-    RENTAL_START = "rental_start"
+    OFFERS = "OFFERS"
+    RENTAL_START = "RENTAL_START"
+    RENTAL_RETURN = "RENTAL_RETURN"
 
 
 class IdempotencyKeyDB(SQLModel, table=True):

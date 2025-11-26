@@ -36,7 +36,7 @@ def upgrade() -> None:
         "idempotency_keys",
         sa.Column("key", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column(
-            "scope", sa.Enum("RENTAL_START", name="idempotencykeyscope"), nullable=False
+            "scope", sa.Enum("RENTAL_START", "OFFERS", "RENTAL_RETURN", name="idempotencykeyscope"), nullable=False
         ),
         sa.Column("request_hash", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("response_body", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
