@@ -4,7 +4,7 @@
 
 # Домашнее задание SD 9
 
-<a href="./docs/entities.md">Сущности</a> | <a href="./docs/architecture">ADR-ки</a> | <a href="./docs/volume-calculation.md">Оценка объема</a> | <a href="./docs/fr_nfr.md">FR/NFR</a>
+<a href="./docs/architecture/final.md">Цельный ADR</a>
 
 ## Задание
 
