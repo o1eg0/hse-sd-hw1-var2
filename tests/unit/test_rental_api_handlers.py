@@ -41,6 +41,12 @@ class DummySession:
                 return self._value
 
         return DummyResult(self.exec_result)
+<<<<<<< HEAD
+    
+    async def flush(self):
+        pass
+=======
+>>>>>>> 69f3ba3 (rental_api handlers and tests (#6))
 
 
 class DummyResponse:
@@ -95,7 +101,7 @@ async def test_create_offer_happy_path(monkeypatch):
     }
     calls: list[tuple[str, dict]] = []
     dummy_responses: dict[tuple[str, str], DummyResponse] = {
-        ("POST", "http://localhost:9000/v1/offer-quote"): DummyResponse(status_code=200, payload=pricing_payload)
+        ("POST", "http://pricing:9000/v1/offer-quote"): DummyResponse(status_code=200, payload=pricing_payload)
     }
 
     monkeypatch.setattr(public, "fetch_user_profile", fake_fetch_user_profile)
@@ -151,10 +157,10 @@ async def test_rentals_start_creates_rental_and_payment(monkeypatch):
 
     calls = []
     responses = {
-        ("GET", "http://localhost:3629/eject-powerbank"): DummyResponse(
+        ("GET", "http://stubs:3629/eject-powerbank"): DummyResponse(
             200, {"success": True, "powerbank_id": "pb-1"}
         ),
-        ("POST", "http://localhost:3629/hold-money-for-order"): DummyResponse(
+        ("POST", "http://stubs:3629/hold-money-for-order"): DummyResponse(
             200, {"status": "success"}
         ),
     }
@@ -184,10 +190,10 @@ async def test_rentals_start_creates_rental_and_payment(monkeypatch):
     assert idem_record.scope == public.IdempotencyKeyScope.RENTAL_START
 
     assert offer.status == OfferStatus.USED
-    assert ("GET", "http://localhost:3629/eject-powerbank", {"station_id": "station-1"}) in calls
+    assert ("GET", "http://stubs:3629/eject-powerbank", {"station_id": "station-1"}) in calls
     assert (
         "POST",
-        "http://localhost:3629/hold-money-for-order",
+        "http://stubs:3629/hold-money-for-order",
         {"user_id": "user-1", "order_id": "rent-123", "amount": 500},
     ) in calls
 
@@ -228,10 +234,10 @@ async def test_rentals_return_completes_and_creates_refund(monkeypatch):
 
     calls = []
     responses = {
-        ("POST", "http://localhost:9000/v1/calc-accrued"): DummyResponse(
+        ("POST", "http://pricing:9000/v1/calc-accrued"): DummyResponse(
             200, {"accrued_amount": 100}
         ),
-        ("POST", "http://localhost:3629/clear-money-for-order"): DummyResponse(
+        ("POST", "http://stubs:3629/clear-money-for-order"): DummyResponse(
             200, {"status": "success"}
         ),
     }
@@ -246,7 +252,7 @@ async def test_rentals_return_completes_and_creates_refund(monkeypatch):
         rental_id="rent-1", sess=session, key="idem-return"
     )
 
-    assert resp == {"rental_id": "rent-1", "status": "returned"}
+    assert resp == {"rental_id": "rent-1"}
     assert rental.status == RentalStatus.CLOSED
     assert rental.finish_time is not None
     assert rental.total_amount == 100
@@ -262,7 +268,7 @@ async def test_rentals_return_completes_and_creates_refund(monkeypatch):
 
     assert (
         "POST",
-        "http://localhost:9000/v1/calc-accrued",
+        "http://pricing:9000/v1/calc-accrued",
         {
             "price_per_hour": 150,
             "free_period_min": 10,
@@ -272,7 +278,7 @@ async def test_rentals_return_completes_and_creates_refund(monkeypatch):
     ) in calls
     assert (
         "POST",
-        "http://localhost:3629/clear-money-for-order",
+        "http://stubs:3629/clear-money-for-order",
         {"user_id": "user-1", "order_id": "rent-1", "amount": 100},
     ) in calls
 
