@@ -13,11 +13,16 @@ services:
 
   rental-api:
     build: .
-    command: python -m services.rental_api.app
-    ports: [ "8080:8000" ]
+    command: bash -c 'alembic upgrade head && python -m services.rental_api.app'
+    ports: [ "8080:8080" ]
     env_file: .env
     environment:
       - RENTAL_API_DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/postgres
+      - RENTAL_QUERY_PRICING_URL=http://pricing:9000
+    depends_on:
+      - postgres
+      - pricing
+      - rental-query
 
   pricing:
     build: .

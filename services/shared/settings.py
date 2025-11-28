@@ -31,6 +31,8 @@ class PricingSettings(BaseSettings):
 
 class RentalApiSettings(BaseSettings):
     database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
+    pricing_url: str = "http://pricing:9000"
+    stubs_url: str = "http://stubs:3629"
 
     model_config = Config(env_prefix="RENTAL_API_")
 

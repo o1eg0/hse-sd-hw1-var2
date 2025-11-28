@@ -17,7 +17,7 @@ HTTP Headers:
 
 Хранение ключей:
 - Таблица `idempotency_keys` в PostgreSQL
-- Scope (rental_start, offer_create, rental_return)
+- Scope (RENTAL_START, OFFERS, RENTAL_RETURN)
 - Request hash (SHA256 от параметров запроса)
 - Response body (сериализованный JSON ответа)
 - TTL записи: 24 часа (автоочистка через pg_cron)
