@@ -41,12 +41,9 @@ class DummySession:
                 return self._value
 
         return DummyResult(self.exec_result)
-<<<<<<< HEAD
     
     async def flush(self):
         pass
-=======
->>>>>>> 69f3ba3 (rental_api handlers and tests (#6))
 
 
 class DummyResponse:
