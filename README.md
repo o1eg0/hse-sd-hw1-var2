@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://github.com/o1eg0/hse-sd-hw1-var2/blob/main/LICENSE)
 [![Python version](https://img.shields.io/badge/Python-3.13-blue)](https://www.python.org/downloads/)
-
+![Tests](https://github.com/o1eg0/hse-sd-hw1-var2/actions/workflows/test.yml/badge.svg)
 
 # Домашнее задание SD 9
 
