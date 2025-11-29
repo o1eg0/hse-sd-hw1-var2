@@ -8,8 +8,10 @@ services:
       - RENTAL_QUERY_DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/postgres
       - RENTAL_QUERY_PRICING_URL=http://pricing:9000
     depends_on:
-      - postgres
-      - pricing
+      postgres:
+        condition: service_healthy
+      pricing:
+        condition: service_started
 
   rental-api:
     build: .
@@ -20,9 +22,12 @@ services:
       - RENTAL_API_DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/postgres
       - RENTAL_QUERY_PRICING_URL=http://pricing:9000
     depends_on:
-      - postgres
-      - pricing
-      - rental-query
+      postgres:
+        condition: service_healthy
+      pricing:
+        condition: service_started
+      rental-query:
+        condition: service_started
 
   pricing:
     build: .
@@ -32,7 +37,8 @@ services:
     environment:
       - PRICING_REDIS_URL=redis://redis:6379
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
 
   stubs:
     build: .
@@ -49,6 +55,11 @@ services:
       - PGDATA=/data/postgres
     volumes:
       - ./.local/pg_data:/data/postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:latest
@@ -56,3 +67,8 @@ services:
     ports: [ "6379:6379" ]
     volumes:
       - ./.local/redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5

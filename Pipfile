@@ -20,6 +20,7 @@ redis = "*"
 asyncpg = "*"
 greenlet = "*"
 alembic = "*"
+structlog = "*"
 
 [dev-packages]
 

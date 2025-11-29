@@ -34,6 +34,7 @@ async def get_configs_cached(redis: Redis) -> Config:
         return Config(**cfg)
     except Exception as e:
         logger.error("Failed to get configs from configs sevice", extra={"error": e})
+        logger.exception(e)
         return Config(
             price_coeff_settings={"last_banks_increase": 1.5},
             tariff_cache_ttl_sec=pricing_settings.tariff_ttl_sec,

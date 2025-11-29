@@ -71,11 +71,18 @@
 Запуск
 
 ```bash
+make start
+```
+или
+```bash
 docker compose up -d --build && docker compose logs -f
 ```
 
 Остановка
-
+```bash
+make stop
+```
+или
 ```bash
 docker compose down
 ```

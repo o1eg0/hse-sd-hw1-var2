@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 
 import uvicorn
@@ -6,7 +7,13 @@ from fastapi.responses import RedirectResponse
 from redis.asyncio import Redis
 
 from services.pricing.v1 import router as v1_router
+from services.shared.json_logging import setup_middleware, setup_logging
 from services.shared.settings import pricing_settings
+
+setup_logging(
+    json_logs=os.getenv("JSON_LOGS", "true").lower() == "true",
+    log_level=os.getenv("LOG_LEVEL", "INFO")
+)
 
 
 @asynccontextmanager
@@ -29,7 +36,7 @@ app = FastAPI(
 )
 
 app.include_router(v1_router)
-
+setup_middleware(app)
 
 @app.get("/", include_in_schema=False)
 async def root():
@@ -37,4 +44,4 @@ async def root():
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=9000, log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=9000, log_config=None)

@@ -127,7 +127,7 @@
 - кэш тарифов и конфигурации в Redis (см. пункт 7) 
 
 `rental-query` - read-сервис:
-- отдаёт `get_rent_info` из Redis / materialized view / PG-реплики
+- отдаёт `get_rent_info` из PG-реплики
 - read-нагрузка изолирована от write 
 
 Моки внешних сервисов:
@@ -308,7 +308,7 @@ Redis-кэш с TTL из `pricing_settings.config_ttl_sec`
   - при недоступности сервиса возвращаем fallback-конфиг:
     - `tariff_cache_ttl_sec = 600`
     - `offer_ttl_sec = 300`
-    - `fallback_greedy_coeff = 2.0`
+    - `fallback_greedy_coeff = 1.2`
     - плюс дефолтные `price_coeff_settings`
 
 Реализация: `httpx.AsyncClient` + `redis.asyncio`
