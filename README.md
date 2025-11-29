@@ -99,3 +99,13 @@ alembic upgrade head
 ```bash
 alembic revision --autogenerate -m "new tables" 
 ```
+
+## Нагрузочное тестирование
+
+Запустить контейнер с утилитой для нагрузочного тестирования
+
+```bash
+docker compose -f docker-compose.load_test.yml up --build
+```
+
+По адресу `http://localhost:8089/` будет поднят веб-интерфейс, в котором можно задать профиль нагрузки и запустить симуляцию запросов.
