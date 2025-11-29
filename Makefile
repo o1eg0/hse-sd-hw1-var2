@@ -26,6 +26,18 @@ lint: ## Run linters in check mode
 	ruff check $(CODE)
 	mypy $(CODE)
 
+.PHONY: start
+start: ## Run all services
+	docker compose up -d --build && docker compose logs -f
+
+.PHONY: stop
+stop: ## Stop all services
+	docker compose down
+
+.PHONY: load-test
+load-test: ## Run all services
+	docker compose -f docker-compose.load_test.yml up --build
+
 .PHONY: test
 test: ## Runs pytest with coverage
 	docker build -t app-testing:latest -f Dockerfile.test . && docker run app-testing:latest

@@ -69,13 +69,19 @@
 ## Быстрый старт (локально)
 
 Запуск
-
+```bash
+make start
+```
+или
 ```bash
 docker compose up -d --build && docker compose logs -f
 ```
 
 Остановка
-
+```bash
+make stop
+```
+или
 ```bash
 docker compose down
 ```
@@ -104,6 +110,10 @@ alembic revision --autogenerate -m "new tables"
 
 Запустить контейнер с утилитой для нагрузочного тестирования
 
+```bash
+make load-test
+```
+или
 ```bash
 docker compose -f docker-compose.load_test.yml up --build
 ```
