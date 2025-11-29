@@ -10,6 +10,8 @@ services:
     depends_on:
       - postgres
       - pricing
+    labels:
+      logging: "promtail"
 
   rental-api:
     build: .
@@ -23,6 +25,8 @@ services:
       - postgres
       - pricing
       - rental-query
+    labels:
+      logging: "promtail"
 
   pricing:
     build: .
@@ -33,6 +37,8 @@ services:
       - PRICING_REDIS_URL=redis://redis:6379
     depends_on:
       - redis
+    labels:
+      logging: "promtail"
 
   stubs:
     build: .
@@ -56,3 +62,38 @@ services:
     ports: [ "6379:6379" ]
     volumes:
       - ./.local/redis_data:/data
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  loki:
+    image: grafana/loki:latest
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - ./observability/promtail-config.yml:/etc/promtail/config.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/config.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./observability/grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - ./observability/grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./observability/grafana/dashboards:/etc/grafana/provisioning/dashboards_files
+    depends_on:
+      - prometheus
+      - loki

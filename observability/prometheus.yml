@@ -1,0 +1,23 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'pricing-service'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['pricing:9000']
+
+  - job_name: 'rental-api'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['rental-api:8080']
+
+  - job_name: 'rental-query'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['rental-query:8000']
+      
+  - job_name: 'stubs'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['stubs:3629']

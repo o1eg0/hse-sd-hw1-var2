@@ -5,6 +5,8 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from redis.asyncio import Redis
 
+from prometheus_fastapi_instrumentator import Instrumentator, metrics
+
 from services.pricing.v1 import router as v1_router
 from services.shared.settings import pricing_settings
 
@@ -27,6 +29,12 @@ app = FastAPI(
     contact={"name": "sd-command-9"},
     lifespan=lifespan,
 )
+
+
+instrumentator = Instrumentator().instrument(app).expose(app)
+instrumentator.add(metrics.requests())
+instrumentator.add(metrics.latency())
+
 
 app.include_router(v1_router)
 

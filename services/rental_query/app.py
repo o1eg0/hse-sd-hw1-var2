@@ -8,6 +8,8 @@ from httpx import AsyncClient
 from sqlalchemy.exc import ProgrammingError
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from prometheus_fastapi_instrumentator import Instrumentator, metrics
+
 from services.shared.db import create_async_sessionmaker
 from services.shared.db_models import RentalDB
 from services.shared.model import RentInfo
@@ -32,6 +34,11 @@ app = FastAPI(
     lifespan=lifespan,
     version="0.1.0",
 )
+
+
+instrumentator = Instrumentator().instrument(app).expose(app)
+instrumentator.add(metrics.requests())
+instrumentator.add(metrics.latency())
 
 
 @app.get("/get_rent_info", response_model=RentInfo)

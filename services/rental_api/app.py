@@ -4,6 +4,8 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
+from prometheus_fastapi_instrumentator import Instrumentator, metrics
+
 from services.rental_api.v1 import router as v1_router
 from services.shared.db import create_async_sessionmaker
 from services.shared.settings import rental_api_settings
@@ -22,6 +24,13 @@ app = FastAPI(
     lifespan=lifespan,
     version="0.1.0",
 )
+
+
+instrumentator = Instrumentator().instrument(app).expose(app)
+instrumentator.add(metrics.requests())
+instrumentator.add(metrics.latency())
+
+
 app.include_router(v1_router)
 
 

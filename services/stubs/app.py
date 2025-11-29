@@ -3,9 +3,16 @@ from fastapi import Depends, FastAPI, HTTPException, Query
 from pydantic import BaseModel
 from starlette.responses import RedirectResponse
 
+from prometheus_fastapi_instrumentator import Instrumentator, metrics
+
 from services.shared.model import EjectResponse, Slot, StationData, Tariff, UserProfile
 
 app = FastAPI()
+
+
+instrumentator = Instrumentator().instrument(app).expose(app)
+instrumentator.add(metrics.requests())
+instrumentator.add(metrics.latency())
 
 
 def get_country_currency(id: str):
