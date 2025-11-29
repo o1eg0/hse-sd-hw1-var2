@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  locust-master:
+    build: 
+      context: .
+      dockerfile: Dockerfile.load_test
+    image: custom-load-tester
+    container_name: locust_runner
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./tests/load/locustfile.py:/mnt/locust/locustfile.py
+    command: -f /mnt/locust/locustfile.py
+    environment:
+      - LOCUST_HOST=http://stubs:3629 
+    networks:
+      - main_network
+
+networks:
+  main_network:
+    external: true
+    name: hse-sd-hw1-var2_default

@@ -1,0 +1,9 @@
+FROM python:3.13-slim
+
+RUN pip install locust
+
+WORKDIR /mnt/locust
+
+COPY ./tests/load/locustfile.py ./
+
+ENTRYPOINT ["locust"]
