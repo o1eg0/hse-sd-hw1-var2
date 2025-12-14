@@ -1,0 +1,8 @@
+user_id,country,trusted,has_subscription
+user-1,RU,true,true
+user-2,RU,false,false
+user-3,RU,false,false
+user-4,RU,true,false
+user-5,DE,false,true
+user-6,DE,false,false
+user-7,DE,true,false

@@ -1,0 +1,260 @@
+{
+  "id": null,
+  "uid": "dwh-metrics",
+  "title": "Powerbank DWH Metrics",
+  "schemaVersion": 39,
+  "version": 1,
+  "timezone": "browser",
+  "refresh": "30s",
+  "style": "dark",
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "country",
+        "type": "query",
+        "label": "Country",
+        "query": "SELECT DISTINCT country FROM dwh_marts.dashboard_metrics ORDER BY country",
+        "datasource": {
+          "type": "postgres",
+          "uid": "dwh-postgres"
+        },
+        "refresh": 1,
+        "includeAll": true,
+        "multi": true,
+        "allValue": "__all"
+      }
+    ]
+  },
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Daily Revenue (captures)",
+      "datasource": {
+        "type": "postgres",
+        "uid": "dwh-postgres"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawSql": "SELECT metric_date AS time, sum(revenue_capture) AS revenue FROM dwh_marts.dashboard_metrics WHERE ('${country:raw}' = '__all' OR country IN (${country:singlequote})) GROUP BY metric_date ORDER BY metric_date;",
+          "datasource": {
+            "type": "postgres",
+            "uid": "dwh-postgres"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 2
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Rentals Started vs Active",
+      "datasource": {
+        "type": "postgres",
+        "uid": "dwh-postgres"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawSql": "SELECT metric_date AS time, rentals_started AS value, 'started' AS metric FROM dwh_marts.dashboard_metrics WHERE ('${country:raw}' = '__all' OR country IN (${country:singlequote})) UNION ALL SELECT metric_date AS time, active_rentals AS value, 'active' AS metric FROM dwh_marts.dashboard_metrics WHERE ('${country:raw}' = '__all' OR country IN (${country:singlequote})) ORDER BY time;",
+          "datasource": {
+            "type": "postgres",
+            "uid": "dwh-postgres"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "displayName": "${__field.labels.metric}"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Offer → Rental Conversion",
+      "datasource": {
+        "type": "postgres",
+        "uid": "dwh-postgres"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawSql": "SELECT metric_date AS time, offer_to_rental_conversion AS value FROM dwh_marts.dashboard_metrics WHERE ('${country:raw}' = '__all' OR country IN (${country:singlequote})) ORDER BY metric_date;",
+          "datasource": {
+            "type": "postgres",
+            "uid": "dwh-postgres"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 2
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Payment Success Rate",
+      "datasource": {
+        "type": "postgres",
+        "uid": "dwh-postgres"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawSql": "SELECT metric_date AS time, payment_success_rate AS value FROM dwh_marts.dashboard_metrics WHERE ('${country:raw}' = '__all' OR country IN (${country:singlequote})) ORDER BY metric_date;",
+          "datasource": {
+            "type": "postgres",
+            "uid": "dwh-postgres"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 2
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Average Rental Duration (minutes)",
+      "datasource": {
+        "type": "postgres",
+        "uid": "dwh-postgres"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawSql": "SELECT metric_date AS time, avg_duration_min AS value FROM dwh_marts.dashboard_metrics WHERE ('${country:raw}' = '__all' OR country IN (${country:singlequote})) ORDER BY metric_date;",
+          "datasource": {
+            "type": "postgres",
+            "uid": "dwh-postgres"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "m",
+          "decimals": 1
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Fallback Pricing Share",
+      "datasource": {
+        "type": "postgres",
+        "uid": "dwh-postgres"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawSql": "SELECT metric_date AS time, fallback_pricing_share AS value FROM dwh_marts.dashboard_metrics WHERE ('${country:raw}' = '__all' OR country IN (${country:singlequote})) ORDER BY metric_date;",
+          "datasource": {
+            "type": "postgres",
+            "uid": "dwh-postgres"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 2
+        },
+        "overrides": []
+      }
+    }
+  ]
+}

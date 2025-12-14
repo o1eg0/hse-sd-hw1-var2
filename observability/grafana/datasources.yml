@@ -16,3 +16,19 @@ datasources:
     url: http://loki:3100
     jsonData:
       maxLines: 1000
+
+  - name: DWH Postgres
+    type: postgres
+    uid: dwh-postgres
+    access: proxy
+    url: postgres:5432
+    user: postgres
+    jsonData:
+      database: postgres
+      sslmode: disable
+      maxOpenConns: 10
+      maxIdleConns: 2
+      connMaxLifetime: 14400
+    secureJsonData:
+      password: postgres
+    editable: true

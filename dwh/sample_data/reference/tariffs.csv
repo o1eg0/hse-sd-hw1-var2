@@ -1,0 +1,4 @@
+tariff_id,country,currency,price_per_hour,free_period_min,default_deposit
+tariff-ru-base,RU,RUB,50,10,300
+tariff-ru-premium,RU,RUB,70,5,400
+tariff-de-base,DE,EUR,60,10,350

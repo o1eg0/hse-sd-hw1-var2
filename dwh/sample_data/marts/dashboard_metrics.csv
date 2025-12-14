@@ -1,0 +1,6 @@
+metric_date,country,currency,offers_created,rentals_started,rentals_finished,active_rentals,revenue_capture,payment_success_rate,offer_to_rental_conversion,fallback_pricing_share,avg_duration_min,avg_ticket
+2024-12-01,RU,RUB,2,2,2,0,380,1,1,0,110,190
+2024-12-02,RU,RUB,2,1,1,0,120,1,0.5,1,60,120
+2024-12-02,DE,EUR,1,1,1,0,150,1,1,0,140,150
+2024-12-03,RU,RUB,1,1,1,0,110,0.6667,1,0,95,110
+2024-12-03,DE,EUR,2,1,0,1,0,0,0.5,1,0,0

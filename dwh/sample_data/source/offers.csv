@@ -1,0 +1,9 @@
+id,user_id,station_id,tariff_id,country,currency,price_per_hour,free_period_min,deposit,pricing_mode,status,expires_at,created_at,updated_at
+offer-ru-1,user-1,ru-101,tariff-ru-base,RU,RUB,50,10,300,NORMAL,USED,2024-12-01 10:00:00,2024-12-01 08:00:00,2024-12-01 08:00:00
+offer-ru-2,user-2,ru-101,tariff-ru-base,RU,RUB,50,10,300,NORMAL,USED,2024-12-01 12:00:00,2024-12-01 10:00:00,2024-12-01 10:00:00
+offer-ru-3,user-3,ru-102,tariff-ru-base,RU,RUB,50,10,300,FALLBACK_GREEDY,USED,2024-12-02 11:00:00,2024-12-02 09:30:00,2024-12-02 09:30:00
+offer-ru-4,user-4,ru-102,tariff-ru-premium,RU,RUB,70,5,400,NORMAL,EXPIRED,2024-12-02 12:00:00,2024-12-02 11:00:00,2024-12-02 11:00:00
+offer-de-1,user-5,de-201,tariff-de-base,DE,EUR,60,10,350,NORMAL,USED,2024-12-02 16:00:00,2024-12-02 13:00:00,2024-12-02 13:00:00
+offer-de-2,user-6,de-202,tariff-de-base,DE,EUR,60,10,350,FALLBACK_GREEDY,USED,2024-12-03 13:00:00,2024-12-03 11:00:00,2024-12-03 11:00:00
+offer-ru-5,user-1,ru-101,tariff-ru-base,RU,RUB,50,10,300,NORMAL,USED,2024-12-03 11:30:00,2024-12-03 09:00:00,2024-12-03 09:00:00
+offer-de-3,user-7,de-201,tariff-de-base,DE,EUR,60,10,350,NORMAL,CANCELLED,2024-12-03 12:00:00,2024-12-03 09:30:00,2024-12-03 09:30:00
